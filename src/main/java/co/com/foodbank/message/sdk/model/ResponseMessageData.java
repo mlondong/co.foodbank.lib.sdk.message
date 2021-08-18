@@ -1,7 +1,7 @@
 package co.com.foodbank.message.sdk.model;
 
 import java.util.Date;
-import co.com.foodbank.user.dto.request.RequestUserData;
+import co.com.foodbank.user.dto.response.UserData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,5 +25,5 @@ public class ResponseMessageData {
 
     private String description;
 
-    private RequestUserData user;
+    private UserData user;
 }
