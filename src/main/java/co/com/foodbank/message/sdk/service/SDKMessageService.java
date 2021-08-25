@@ -2,7 +2,6 @@ package co.com.foodbank.message.sdk.service;
 
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +18,7 @@ import co.com.foodbank.message.dto.MessageDTO;
 import co.com.foodbank.message.sdk.exception.SDKMessageServiceException;
 import co.com.foodbank.message.sdk.exception.SDKMessageServiceIllegalArgumentException;
 import co.com.foodbank.message.sdk.model.ResponseMessageData;
+import co.com.foodbank.message.sdk.util.UrlMessage;
 
 /**
  * Class service through rest-template to communicate with the Rest Api Message.
@@ -39,8 +39,8 @@ public class SDKMessageService implements ISDKMessage {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Value("${urlSdkCreateMessage}")
-    private String urlSdkCreateMessage;
+    @Autowired
+    private UrlMessage urlMessage;
 
 
     @Override
@@ -52,8 +52,11 @@ public class SDKMessageService implements ISDKMessage {
             HttpEntity<MessageDTO> entity =
                     new HttpEntity<MessageDTO>(dto, httpHeaders);
 
-            String response = restTemplate.exchange(urlSdkCreateMessage,
-                    HttpMethod.POST, entity, String.class).getBody();
+            String response =
+                    restTemplate
+                            .exchange(urlMessage.toCreateMessage(),
+                                    HttpMethod.POST, entity, String.class)
+                            .getBody();
 
             return objectMapper.readValue(response,
                     new TypeReference<ResponseMessageData>() {});
